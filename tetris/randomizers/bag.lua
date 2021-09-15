@@ -17,7 +17,7 @@ function BagRandomizer:generatePiece()
             table.insert(self.bag, i)
         end
 	end
-	local x = math.random(table.getn(self.bag))
+	local x = love.math.random(table.getn(self.bag))
 	return table.remove(self.bag, x)
 end
 

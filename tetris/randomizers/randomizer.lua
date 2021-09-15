@@ -18,7 +18,7 @@ end
 local shapes = {"I", "J", "L", "O", "S", "T", "Z"}
 
 function Randomizer:generatePiece()
-	return shapes[math.random(7)]
+	return shapes[love.math.random(7)]
 end
 
 return Randomizer

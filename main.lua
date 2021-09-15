@@ -1,5 +1,5 @@
 function love.load()
-	math.randomseed(os.time())
+	--math.randomseed(os.time())
 	highscores = {}
 	require "load.rpc"
 	require "load.graphics"

@@ -34,7 +34,7 @@ function TitleScene:new()
 	self.text_flag = false
 	DiscordRPC:update({
 		details = "In menus",
-		state = mainmenuidle[math.random(#mainmenuidle)],
+		state = mainmenuidle[love.math.random(#mainmenuidle)],
 	})
 end
 
