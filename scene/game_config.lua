@@ -12,7 +12,7 @@ ConfigScene.options = {
 	{"piece_colour", "Piece Colours", false, {"Per ruleset", "Arika", "TTC"}},
 	{"world_reverse", "A Button Rotation", false, {"Left", "Auto", "Right"}},
 	{"spawn_positions", "Spawn Positions", false, {"Per ruleset", "In field", "Out of field"}},
-	{"display_gamemode", "Display Gamemode", false, {"On", "Off"}},
+	{"display_gamemode", "Debug Info", false, {"On", "Off"}},
 	{"das_last_key", "DAS Last Key", false, {"Off", "On"}},
 	{"smooth_movement", "Smooth Piece Drop", false, {"On", "Off"}},
 	{"synchroes_allowed", "Synchroes", false, {"Per ruleset", "On", "Off"}},
@@ -27,9 +27,9 @@ function ConfigScene:new()
 	-- load current config
 	self.config = config.input
 	self.highlight = 1
-	
+
 	DiscordRPC:update({
-		details = "In menus",
+		details = "In settings",
 		state = "Changing game settings",
 	})
 
@@ -52,7 +52,7 @@ function ConfigScene:render()
 
 	love.graphics.setFont(font_3x5_4)
 	love.graphics.print("GAME SETTINGS", 80, 40)
-	
+
 	--Lazy check to see if we're on the SFX or BGM slider. Probably will need to be rewritten if more options get added.
 	love.graphics.setColor(1, 1, 1, 0.5)
 	if not ConfigScene.options[self.highlight][3] then
@@ -60,7 +60,7 @@ function ConfigScene:render()
 	else
 		love.graphics.rectangle("fill", 65 + (1+self.highlight-#self.options) * 300, 342, 215, 33)
 	end
-	
+
 	love.graphics.setFont(font_3x5_2)
 	for i, option in ipairs(ConfigScene.options) do
 		if not option[3] then

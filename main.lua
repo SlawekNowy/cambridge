@@ -1,6 +1,7 @@
 function love.load()
 	--math.randomseed(os.time())
 	highscores = {}
+	love.graphics.setDefaultFilter("linear", "nearest")
 	require "load.rpc"
 	require "load.graphics"
 	require "load.fonts"
@@ -63,7 +64,6 @@ function love.draw()
 	love.graphics.push()
 
 	-- get offset matrix
-	love.graphics.setDefaultFilter("linear", "nearest")
 	local width = love.graphics.getWidth()
 	local height = love.graphics.getHeight()
 	local scale_factor = math.min(width / 640, height / 480)
@@ -74,6 +74,13 @@ function love.draw()
 	love.graphics.scale(scale_factor)
 		
 	scene:render()
+
+	if config.gamesettings.display_gamemode == 1 or scene.title == "Title" then
+		love.graphics.setFont(font_3x5_2)
+		love.graphics.setColor(1, 1, 1, 1)
+		love.graphics.printf(version, 0, 460, 635, "right")
+	end
+	
 	love.graphics.pop()
 		
 	love.graphics.setCanvas()
@@ -90,6 +97,7 @@ function love.keypressed(key, scancode)
 	elseif scancode == "f2" and scene.title ~= "Input Config" and scene.title ~= "Game" then
 		scene = InputConfigScene()
 		switchBGM(nil)
+		loadSave()
 	-- secret sound playing :eyes:
 	elseif scancode == "f8" and scene.title == "Title" then
 		config.secret = not config.secret
@@ -98,8 +106,8 @@ function love.keypressed(key, scancode)
 		if config.secret then playSE("mode_decide")
 		else playSE("erase") end
 		-- f12 is reserved for saving screenshots
-		elseif scancode == "f12" then
-				local ss_name = os.date("ss/%Y-%m-%d_%H-%M-%S.png")
+	elseif scancode == "f12" then
+		local ss_name = os.date("ss/%Y-%m-%d_%H-%M-%S.png")
 		local info = love.filesystem.getInfo("ss", "directory")
 		if not info then
 			love.filesystem.remove("ss")
@@ -259,11 +267,15 @@ function love.joystickhat(joystick, hat, direction)
 	end
 end
 
+function love.wheelmoved(x, y)
+	scene:onInputPress({input=nil, type="wheel", x=x, y=y})
+end
+
 function love.focus(f)
-	if f and (scene.title ~= "Game" or not scene.paused) then
-		resumeBGM()
+	if f then
+		resumeBGM(true)
 	else
-		pauseBGM()
+		pauseBGM(true)
 	end
 end
 

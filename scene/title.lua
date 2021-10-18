@@ -23,6 +23,15 @@ local mainmenuidle = {
 	"Having a nap",
 	"In menus",
 	"Bottom text",
+	"Trying to see all the funny rpc messages (maybe)",
+	"Not not not playing",
+	"AFK",
+	"Preparing for their next game",
+	"Who are those people on that boat?",
+	"Welcome to Cambridge!",
+	"who even reads these",
+	"Made with love in LOVE!",
+	"This is probably the longest RPC string out of every possible RPC string that can be displayed."
 }
 
 function TitleScene:new()
@@ -35,6 +44,8 @@ function TitleScene:new()
 	DiscordRPC:update({
 		details = "In menus",
 		state = mainmenuidle[love.math.random(#mainmenuidle)],
+		largeImageKey = "icon2",
+		largeImageText = version
 	})
 end
 
@@ -49,15 +60,28 @@ function TitleScene:update()
 end
 
 function TitleScene:render()
-	love.graphics.setFont(font_3x5_2)
-
+	love.graphics.setFont(font_3x5_4)
 	love.graphics.setColor(1, 1, 1, 1 - self.snow_bg_opacity)
+	--[[
 	love.graphics.draw(
 		backgrounds["title"],
 		0, 0, 0,
 		0.5, 0.5
 	)
+	]]
+	love.graphics.draw(
+		backgrounds["title_night"],
+		0, 0, 0,
+		0.5, 0.5
+	)
+	love.graphics.draw(
+		misc_graphics["icon"],
+		460, 170, 0,
+		2, 2
+	)
+	love.graphics.printf("Thanks for 1 year!", 430, 280, 160, "center")
 
+	love.graphics.setFont(font_3x5_2)
 	love.graphics.setColor(1, 1, 1, self.snow_bg_opacity)
 	love.graphics.draw(
 		backgrounds["snow"],
@@ -82,8 +106,6 @@ function TitleScene:render()
 	for i, screen in pairs(main_menu_screens) do
 		love.graphics.printf(screen.title, 40, 280 + 20 * i, 120, "left")
 	end
-
-	love.graphics.printf(version, 0, 460, love.graphics.getWidth() - 5, "right")
 end
 
 function TitleScene:changeOption(rel)
@@ -103,11 +125,17 @@ function TitleScene:onInputPress(e)
 		playSE("cursor")
 	elseif e.input == "menu_back" or e.scancode == "backspace" or e.scancode == "delete" then
 		love.event.quit()
+	-- no winter easter egg for now
+	--[[
 	else
-		self.text = self.text .. (e.scancode ~= nil and e.scancode or "")
+		self.text = self.text .. (e.scancode or "")
 		if self.text == "ffffff" then
 			self.text_flag = true
+			DiscordRPC:update({
+				largeImageKey = "snow"
+			})
 		end
+	]]
 	end
 end
 
